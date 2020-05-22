@@ -75,7 +75,7 @@ if (req.query.adress) {
 res.send({error: 'Please provide location'})
 }  
 })
-
+console.log('test')
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000')
