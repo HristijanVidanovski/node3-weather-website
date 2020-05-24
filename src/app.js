@@ -4,8 +4,9 @@
 
 const express = require('express')
 const hbs = require('hbs')
-const path = require('path')
+const path = require('path') 
 const app = express()
+const port = process.env.PORT || 3000
 
 //geocode and forecast
 const request = require('request')
@@ -77,8 +78,8 @@ res.send({error: 'Please provide location'})
 })
 console.log('test')
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000')
+app.listen(port, () => {
+    console.log('Server is running on port ' + port)
 })
 
 

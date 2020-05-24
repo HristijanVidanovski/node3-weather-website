@@ -13,8 +13,8 @@ messageTwo.textContent = null
 messageThree.textContent = null
 
 
-
-fetch('http://localhost:3000/weather?adress=' + encodeURIComponent(location) + '').then((response) => {
+//http://localhost:3000
+fetch('/weather?adress=' + encodeURIComponent(location) + '').then((response) => {
     response.json().then((data) => {
 
         if (data.error) {
