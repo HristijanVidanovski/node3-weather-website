@@ -1,88 +1,68 @@
-// serverot celo vreme e aktiven, za da se deaktivira treba vo terminal  ctrl c
-// za da se aktivira aplikacija od folder node src/app.js
-//nodemon src/app.js -e js,hbs -- aktiviranje nodemon so hbs 
 
 const express = require('express')
 const hbs = require('hbs')
 const path = require('path') 
 const app = express()
 const port = process.env.PORT || 3000
-
-//geocode and forecast
 const request = require('request')
- const geocode = require('./utils/geocode')
- const forecast = require('./utils/forecast')
-
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath))
-
-
 const viewPath = path.join(__dirname, '../templates/views')
 const partialsPath = path.join(__dirname, '../templates/partials')
-
 app.set('view engine', 'hbs')
 app.set('views', viewPath)
 hbs.registerPartials(partialsPath)
 
-
-
 app.get('', (req, res) => {    // route do index.hbs
+    //The res.render() function is used to render a view and sends the rendered HTML string to the client. 
     res.render('index', {
         title: 'Weather',
         name: 'Hristijan',
-
     } )
 })
 
 app.get('/about', (req, res) => {// route do about.hbs
-res.render('about', {
-    title: 'About me',
-    name: 'Hristijan',
-})
+    res.render('about', {
+        title: 'About me',
+        name: 'Hristijan',
+    })
 })
 
 app.get('/help', (req, res) => { // route do help.hbs
-res.render('help', {
-    name:'Hristijan',
-    title: 'Help'
-})
+    res.render('help', {
+        name:'Hristijan',
+        title: 'Help'
+    })
 })
 
 //web server// nema weather strana/preku js treba da se prati do 
 app.get('/weather', (req, res) => {
-    
 if (req.query.adress) {
-    geocode(req.query.adress, (error, { location, longitude, latitude } = {}) => { //locationData se zamenva so destructuring na obejct
-
+    geocode(req.query.adress, (error, { location, longitude, latitude } = {}) => { 
         if (error) {
            return res.send({error: error})
         } 
-        forecast(longitude,latitude, (error, { weather_descriptions, temperature } = {}) => { // location daata ne se koristi oti ke ima destructuring
-           //forecastData se zamenva so destructuring
-           if (error) {
-              return res.send({error: error})
-           }
-
-           return res.send({
-               location: location,
-               forecast: weather_descriptions,
-               temperature: temperature
-           })
-
-           })
-    
-          })
+        forecast(longitude,latitude, (error, { weather_descriptions, temperature } = {}) => { 
+                if (error) {
+                    return res.send({error: error})
+                }
+                return res.send({
+                    location: location,
+                    forecast: weather_descriptions,
+                    temperature: temperature
+                })
+        })
+     })
 } else {
 res.send({error: 'Please provide location'})
 }  
 })
-console.log('test')
 
 app.listen(port, () => {
     console.log('Server is running on port ' + port)
 })
-
-
 
 
 
